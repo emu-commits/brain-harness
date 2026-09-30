@@ -1,0 +1,87 @@
+{
+  "description": "Conservative pick (high), a duration multiplier and an accepted calibration for the category.",
+  "inputs": {
+    "today": "2026-01-05",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 30,
+          "base": 60,
+          "high": 90
+        },
+        "category": "writing"
+      },
+      {
+        "id": "B",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 30,
+          "base": 60,
+          "high": 90
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "d1",
+        "fromTaskId": "A",
+        "toTaskId": "B",
+        "lagDays": 0
+      }
+    ],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "loggedMinutes": {},
+    "pick": "high",
+    "durationMult": 1.0,
+    "capacityMult": 1,
+    "calibration": {
+      "writing": 2
+    },
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": true,
+    "order": [
+      "A",
+      "B"
+    ],
+    "completion": "2026-01-07",
+    "milestones": {
+      "M": "2026-01-07"
+    },
+    "tasks": {
+      "A": {
+        "start": "2026-01-05",
+        "finish": "2026-01-06",
+        "critical": true
+      },
+      "B": {
+        "start": "2026-01-06",
+        "finish": "2026-01-07",
+        "critical": true
+      }
+    }
+  }
+}

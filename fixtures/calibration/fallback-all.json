@@ -1,0 +1,50 @@
+{
+  "description": "Only 2 design tasks (< 5) \u2192 falls back to all categories '*'. Ratios 1, 1.5, 2, 0.5, 0.5 \u2192 median 1.",
+  "inputs": {
+    "samples": [
+      {
+        "taskId": "t1",
+        "estimateBase": 60,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t2",
+        "estimateBase": 60,
+        "actualMinutes": 90,
+        "completedAt": "2026-01-02T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t3",
+        "estimateBase": 60,
+        "actualMinutes": 120,
+        "completedAt": "2026-01-03T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "d1",
+        "estimateBase": 60,
+        "actualMinutes": 30,
+        "completedAt": "2026-01-06T12:00:00.000Z",
+        "category": "design"
+      },
+      {
+        "taskId": "d2",
+        "estimateBase": 60,
+        "actualMinutes": 30,
+        "completedAt": "2026-01-07T12:00:00.000Z",
+        "category": "design"
+      }
+    ],
+    "category": "design",
+    "window": 10,
+    "minTasks": 5
+  },
+  "expected": {
+    "category": "*",
+    "multiplier": 1,
+    "n": 5
+  }
+}

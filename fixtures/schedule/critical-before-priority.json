@@ -1,0 +1,103 @@
+{
+  "description": "Critical chain A\u2192C goes first even though B has higher priority; one person works serially.",
+  "inputs": {
+    "today": "2026-01-05",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 3,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 120,
+          "base": 120,
+          "high": 120
+        }
+      },
+      {
+        "id": "B",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 1,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      },
+      {
+        "id": "C",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "d1",
+        "fromTaskId": "A",
+        "toTaskId": "C",
+        "lagDays": 0
+      }
+    ],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "loggedMinutes": {},
+    "pick": "base",
+    "durationMult": 1,
+    "capacityMult": 1,
+    "calibration": {},
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": true,
+    "order": [
+      "A",
+      "C",
+      "B"
+    ],
+    "completion": "2026-01-08",
+    "milestones": {
+      "M": "2026-01-08"
+    },
+    "tasks": {
+      "A": {
+        "start": "2026-01-05",
+        "finish": "2026-01-06",
+        "critical": true
+      },
+      "B": {
+        "start": "2026-01-08",
+        "finish": "2026-01-08",
+        "critical": false
+      },
+      "C": {
+        "start": "2026-01-07",
+        "finish": "2026-01-07",
+        "critical": true
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "description": "Zero weekly capacity with open work is an error (maps to gap G2).",
+  "inputs": {
+    "today": "2026-01-05",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      }
+    ],
+    "dependencies": [],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "loggedMinutes": {},
+    "pick": "base",
+    "durationMult": 1,
+    "capacityMult": 1,
+    "calibration": {},
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": false,
+    "error": {
+      "kind": "noCapacity"
+    }
+  }
+}

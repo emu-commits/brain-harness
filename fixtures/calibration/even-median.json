@@ -1,0 +1,57 @@
+{
+  "description": "Six tasks, ratios alternating 1 and 2 \u2192 exp(ln 2 / 2) = \u221a2.",
+  "inputs": {
+    "samples": [
+      {
+        "taskId": "e1",
+        "estimateBase": 60,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "category": "code"
+      },
+      {
+        "taskId": "e2",
+        "estimateBase": 60,
+        "actualMinutes": 120,
+        "completedAt": "2026-01-02T12:00:00.000Z",
+        "category": "code"
+      },
+      {
+        "taskId": "e3",
+        "estimateBase": 60,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-03T12:00:00.000Z",
+        "category": "code"
+      },
+      {
+        "taskId": "e4",
+        "estimateBase": 60,
+        "actualMinutes": 120,
+        "completedAt": "2026-01-04T12:00:00.000Z",
+        "category": "code"
+      },
+      {
+        "taskId": "e5",
+        "estimateBase": 60,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-05T12:00:00.000Z",
+        "category": "code"
+      },
+      {
+        "taskId": "e6",
+        "estimateBase": 60,
+        "actualMinutes": 120,
+        "completedAt": "2026-01-06T12:00:00.000Z",
+        "category": "code"
+      }
+    ],
+    "category": "code",
+    "window": 10,
+    "minTasks": 5
+  },
+  "expected": {
+    "category": "code",
+    "multiplier": 1.4142,
+    "n": 6
+  }
+}

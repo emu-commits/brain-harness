@@ -1,0 +1,50 @@
+{
+  "description": "Five writing tasks, ratios 1.0, 1.5, 2.0, 1.2, 0.8 \u2192 geometric median 1.2.",
+  "inputs": {
+    "samples": [
+      {
+        "taskId": "t1",
+        "estimateBase": 60,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t2",
+        "estimateBase": 60,
+        "actualMinutes": 90,
+        "completedAt": "2026-01-02T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t3",
+        "estimateBase": 60,
+        "actualMinutes": 120,
+        "completedAt": "2026-01-03T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t4",
+        "estimateBase": 50,
+        "actualMinutes": 60,
+        "completedAt": "2026-01-04T12:00:00.000Z",
+        "category": "writing"
+      },
+      {
+        "taskId": "t5",
+        "estimateBase": 100,
+        "actualMinutes": 80,
+        "completedAt": "2026-01-05T12:00:00.000Z",
+        "category": "writing"
+      }
+    ],
+    "category": "writing",
+    "window": 10,
+    "minTasks": 5
+  },
+  "expected": {
+    "category": "writing",
+    "multiplier": 1.2,
+    "n": 5
+  }
+}

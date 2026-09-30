@@ -1,0 +1,111 @@
+{
+  "description": "Skipped S is bridged A\u2192B with lag 1+2; X\u2192Y\u2192Z\u2192X is one cycle; W is outside it.",
+  "inputs": {
+    "nodes": [
+      {
+        "id": "A"
+      },
+      {
+        "id": "S",
+        "status": "skipped"
+      },
+      {
+        "id": "B"
+      },
+      {
+        "id": "X"
+      },
+      {
+        "id": "Y"
+      },
+      {
+        "id": "Z"
+      },
+      {
+        "id": "W"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "1",
+        "fromTaskId": "A",
+        "toTaskId": "S",
+        "lagDays": 1
+      },
+      {
+        "id": "2",
+        "fromTaskId": "S",
+        "toTaskId": "B",
+        "lagDays": 2
+      },
+      {
+        "id": "3",
+        "fromTaskId": "X",
+        "toTaskId": "Y",
+        "lagDays": 0
+      },
+      {
+        "id": "4",
+        "fromTaskId": "Y",
+        "toTaskId": "Z",
+        "lagDays": 0
+      },
+      {
+        "id": "5",
+        "fromTaskId": "Z",
+        "toTaskId": "X",
+        "lagDays": 0
+      },
+      {
+        "id": "6",
+        "fromTaskId": "Z",
+        "toTaskId": "W",
+        "lagDays": 0
+      }
+    ]
+  },
+  "expected": {
+    "nodes": [
+      "A",
+      "B",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ],
+    "edges": [
+      [
+        "A",
+        "B",
+        3
+      ],
+      [
+        "X",
+        "Y",
+        0
+      ],
+      [
+        "Y",
+        "Z",
+        0
+      ],
+      [
+        "Z",
+        "W",
+        0
+      ],
+      [
+        "Z",
+        "X",
+        0
+      ]
+    ],
+    "cycles": [
+      [
+        "X",
+        "Y",
+        "Z"
+      ]
+    ]
+  }
+}

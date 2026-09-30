@@ -1,0 +1,134 @@
+{
+  "description": "Debt interest accrues to the amount owed, then the payment applies; net worth subtracts debt.",
+  "inputs": {
+    "startMonth": "2026-01",
+    "horizonMonths": 6,
+    "picks": {
+      "cost": "base",
+      "revenue": "base",
+      "ramp": "base",
+      "assetRate": "base",
+      "debtRate": "base"
+    },
+    "costMult": 1,
+    "revenueMult": 1,
+    "inflationAnnual": 0.03,
+    "accounts": [
+      {
+        "id": "C",
+        "goalId": "G",
+        "name": "C",
+        "type": "cash",
+        "balance": 250000,
+        "annualRate": {
+          "low": 0,
+          "base": 0,
+          "high": 0
+        },
+        "monthlyContribution": 0,
+        "isRunwaySource": true
+      },
+      {
+        "id": "D",
+        "goalId": "G",
+        "name": "D",
+        "type": "debt",
+        "balance": 500000,
+        "annualRate": {
+          "low": 0.1,
+          "base": 0.18,
+          "high": 0.24
+        },
+        "monthlyContribution": 20000,
+        "isRunwaySource": false
+      }
+    ],
+    "cashFlows": [],
+    "revenueStreams": [],
+    "taskCosts": [],
+    "milestoneDates": {}
+  },
+  "expected": {
+    "months": [
+      {
+        "month": "2026-01",
+        "balances": {
+          "C": 250000,
+          "D": 486944
+        },
+        "netWorth": -236944,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-02",
+        "balances": {
+          "C": 250000,
+          "D": 473707
+        },
+        "netWorth": -223707,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-03",
+        "balances": {
+          "C": 250000,
+          "D": 460286
+        },
+        "netWorth": -210286,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-04",
+        "balances": {
+          "C": 250000,
+          "D": 446679
+        },
+        "netWorth": -196679,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-05",
+        "balances": {
+          "C": 250000,
+          "D": 432883
+        },
+        "netWorth": -182883,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-06",
+        "balances": {
+          "C": 250000,
+          "D": 418895
+        },
+        "netWorth": -168895,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-07",
+        "balances": {
+          "C": 250000,
+          "D": 404713
+        },
+        "netWorth": -154713,
+        "runway": 250000,
+        "revenue": 0,
+        "goalCosts": 0
+      }
+    ],
+    "runwayExhaustedMonth": null,
+    "totalGoalCost": 0
+  }
+}

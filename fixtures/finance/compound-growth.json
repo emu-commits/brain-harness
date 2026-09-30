@@ -1,0 +1,173 @@
+{
+  "description": "Monthly compounding from an annual rate; growth rounds to cents each month; contributions after growth.",
+  "inputs": {
+    "startMonth": "2026-01",
+    "horizonMonths": 12,
+    "picks": {
+      "cost": "base",
+      "revenue": "base",
+      "ramp": "base",
+      "assetRate": "base",
+      "debtRate": "base"
+    },
+    "costMult": 1,
+    "revenueMult": 1,
+    "inflationAnnual": 0.03,
+    "accounts": [
+      {
+        "id": "S",
+        "goalId": "G",
+        "name": "S",
+        "type": "savings",
+        "balance": 100000,
+        "annualRate": {
+          "low": 0.02,
+          "base": 0.12,
+          "high": 0.2
+        },
+        "monthlyContribution": 5000,
+        "isRunwaySource": true
+      }
+    ],
+    "cashFlows": [],
+    "revenueStreams": [],
+    "taskCosts": [],
+    "milestoneDates": {}
+  },
+  "expected": {
+    "months": [
+      {
+        "month": "2026-01",
+        "balances": {
+          "S": 105949
+        },
+        "netWorth": 105949,
+        "runway": 105949,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-02",
+        "balances": {
+          "S": 111954
+        },
+        "netWorth": 111954,
+        "runway": 111954,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-03",
+        "balances": {
+          "S": 118016
+        },
+        "netWorth": 118016,
+        "runway": 118016,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-04",
+        "balances": {
+          "S": 124136
+        },
+        "netWorth": 124136,
+        "runway": 124136,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-05",
+        "balances": {
+          "S": 130314
+        },
+        "netWorth": 130314,
+        "runway": 130314,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-06",
+        "balances": {
+          "S": 136551
+        },
+        "netWorth": 136551,
+        "runway": 136551,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-07",
+        "balances": {
+          "S": 142847
+        },
+        "netWorth": 142847,
+        "runway": 142847,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-08",
+        "balances": {
+          "S": 149202
+        },
+        "netWorth": 149202,
+        "runway": 149202,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-09",
+        "balances": {
+          "S": 155618
+        },
+        "netWorth": 155618,
+        "runway": 155618,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-10",
+        "balances": {
+          "S": 162095
+        },
+        "netWorth": 162095,
+        "runway": 162095,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-11",
+        "balances": {
+          "S": 168633
+        },
+        "netWorth": 168633,
+        "runway": 168633,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-12",
+        "balances": {
+          "S": 175233
+        },
+        "netWorth": 175233,
+        "runway": 175233,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2027-01",
+        "balances": {
+          "S": 181896
+        },
+        "netWorth": 181896,
+        "runway": 181896,
+        "revenue": 0,
+        "goalCosts": 0
+      }
+    ],
+    "runwayExhaustedMonth": null,
+    "totalGoalCost": 0
+  }
+}

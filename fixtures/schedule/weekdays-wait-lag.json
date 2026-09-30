@@ -1,0 +1,109 @@
+{
+  "description": "Weekday-only capacity from a Saturday; a 3-day wait after A, then B with a 1-day lag.",
+  "inputs": {
+    "today": "2026-01-03",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 120,
+          "base": 120,
+          "high": 120
+        }
+      },
+      {
+        "id": "W",
+        "milestoneId": "M",
+        "kind": "wait",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "waitDays": {
+          "low": 2,
+          "base": 3,
+          "high": 5
+        }
+      },
+      {
+        "id": "B",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "d1",
+        "fromTaskId": "A",
+        "toTaskId": "W",
+        "lagDays": 0
+      },
+      {
+        "id": "d2",
+        "fromTaskId": "W",
+        "toTaskId": "B",
+        "lagDays": 1
+      }
+    ],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      0,
+      120,
+      120,
+      120,
+      120,
+      120,
+      0
+    ],
+    "loggedMinutes": {},
+    "pick": "base",
+    "durationMult": 1,
+    "capacityMult": 1,
+    "calibration": {},
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": true,
+    "order": [
+      "A",
+      "W",
+      "B"
+    ],
+    "completion": "2026-01-09",
+    "milestones": {
+      "M": "2026-01-09"
+    },
+    "tasks": {
+      "A": {
+        "start": "2026-01-05",
+        "finish": "2026-01-05",
+        "critical": true
+      },
+      "W": {
+        "start": "2026-01-05",
+        "finish": "2026-01-08",
+        "critical": true
+      },
+      "B": {
+        "start": "2026-01-09",
+        "finish": "2026-01-09",
+        "critical": true
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "description": "A cycle is reported with its exact members, not scheduled.",
+  "inputs": {
+    "today": "2026-01-05",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      },
+      {
+        "id": "B",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      },
+      {
+        "id": "C",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "d1",
+        "fromTaskId": "A",
+        "toTaskId": "B",
+        "lagDays": 0
+      },
+      {
+        "id": "d2",
+        "fromTaskId": "B",
+        "toTaskId": "A",
+        "lagDays": 0
+      },
+      {
+        "id": "d3",
+        "fromTaskId": "B",
+        "toTaskId": "C",
+        "lagDays": 0
+      }
+    ],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "loggedMinutes": {},
+    "pick": "base",
+    "durationMult": 1,
+    "capacityMult": 1,
+    "calibration": {},
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": false,
+    "error": {
+      "kind": "cycle",
+      "taskIds": [
+        "A",
+        "B"
+      ]
+    }
+  }
+}

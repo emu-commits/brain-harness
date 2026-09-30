@@ -1,0 +1,152 @@
+{
+  "description": "Same inputs under conservative picks with a 1.1 cost multiplier.",
+  "inputs": {
+    "startMonth": "2026-01",
+    "horizonMonths": 6,
+    "picks": {
+      "cost": "high",
+      "revenue": "low",
+      "ramp": "high",
+      "assetRate": "low",
+      "debtRate": "high"
+    },
+    "costMult": 1.1,
+    "revenueMult": 1,
+    "inflationAnnual": 0.03,
+    "accounts": [
+      {
+        "id": "R",
+        "goalId": "G",
+        "name": "R",
+        "type": "cash",
+        "balance": 15000,
+        "annualRate": {
+          "low": 0,
+          "base": 0,
+          "high": 0
+        },
+        "monthlyContribution": 0,
+        "isRunwaySource": true
+      }
+    ],
+    "cashFlows": [
+      {
+        "id": "f1",
+        "goalId": "G",
+        "name": "rent",
+        "amount": -10000,
+        "accountId": "R",
+        "startMonth": "2026-01",
+        "recurrence": "monthly",
+        "inflationAdjusted": true
+      }
+    ],
+    "revenueStreams": [
+      {
+        "id": "s1",
+        "goalId": "G",
+        "name": "sales",
+        "accountId": "R",
+        "startMonth": "2026-03",
+        "rampMonths": {
+          "low": 1,
+          "base": 3,
+          "high": 6
+        },
+        "targetMonthly": {
+          "low": 20000,
+          "base": 30000,
+          "high": 45000
+        }
+      }
+    ],
+    "taskCosts": [
+      {
+        "taskId": "T",
+        "finish": "2026-02-20",
+        "cost": {
+          "low": 5000,
+          "base": 8000,
+          "high": 12050
+        }
+      }
+    ],
+    "milestoneDates": {}
+  },
+  "expected": {
+    "months": [
+      {
+        "month": "2026-01",
+        "balances": {
+          "R": 5000
+        },
+        "netWorth": 5000,
+        "runway": 5000,
+        "revenue": 0,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-02",
+        "balances": {
+          "R": -18280
+        },
+        "netWorth": -18280,
+        "runway": -18280,
+        "revenue": 0,
+        "goalCosts": 13255
+      },
+      {
+        "month": "2026-03",
+        "balances": {
+          "R": -24996
+        },
+        "netWorth": -24996,
+        "runway": -24996,
+        "revenue": 3333,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-04",
+        "balances": {
+          "R": -28403
+        },
+        "netWorth": -28403,
+        "runway": -28403,
+        "revenue": 6667,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-05",
+        "balances": {
+          "R": -28502
+        },
+        "netWorth": -28502,
+        "runway": -28502,
+        "revenue": 10000,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-06",
+        "balances": {
+          "R": -25293
+        },
+        "netWorth": -25293,
+        "runway": -25293,
+        "revenue": 13333,
+        "goalCosts": 0
+      },
+      {
+        "month": "2026-07",
+        "balances": {
+          "R": -18775
+        },
+        "netWorth": -18775,
+        "runway": -18775,
+        "revenue": 16667,
+        "goalCosts": 0
+      }
+    ],
+    "runwayExhaustedMonth": "2026-02",
+    "totalGoalCost": 13255
+  }
+}

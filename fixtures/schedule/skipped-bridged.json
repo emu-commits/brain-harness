@@ -1,0 +1,103 @@
+{
+  "description": "A skipped task disappears; its dependent inherits its predecessor with summed lag (1 + 1 = 2 days).",
+  "inputs": {
+    "today": "2026-01-05",
+    "tasks": [
+      {
+        "id": "A",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      },
+      {
+        "id": "S",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "skipped",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 600,
+          "base": 600,
+          "high": 600
+        }
+      },
+      {
+        "id": "B",
+        "milestoneId": "M",
+        "kind": "work",
+        "status": "ready",
+        "priority": 2,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "estimateMinutes": {
+          "low": 60,
+          "base": 60,
+          "high": 60
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "d1",
+        "fromTaskId": "A",
+        "toTaskId": "S",
+        "lagDays": 1
+      },
+      {
+        "id": "d2",
+        "fromTaskId": "S",
+        "toTaskId": "B",
+        "lagDays": 1
+      }
+    ],
+    "milestoneIds": [
+      "M"
+    ],
+    "minutesByWeekday": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "loggedMinutes": {},
+    "pick": "base",
+    "durationMult": 1,
+    "capacityMult": 1,
+    "calibration": {},
+    "blockedAssumeDays": 7,
+    "horizonDays": 3720
+  },
+  "expected": {
+    "ok": true,
+    "order": [
+      "A",
+      "B"
+    ],
+    "completion": "2026-01-07",
+    "milestones": {
+      "M": "2026-01-07"
+    },
+    "tasks": {
+      "A": {
+        "start": "2026-01-05",
+        "finish": "2026-01-05",
+        "critical": true
+      },
+      "B": {
+        "start": "2026-01-07",
+        "finish": "2026-01-07",
+        "critical": true
+      }
+    }
+  }
+}
