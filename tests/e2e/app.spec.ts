@@ -32,7 +32,7 @@ test('complete a task with actuals, cost and evidence in three taps after Start'
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(page.getByText('No open tasks.')).toBeVisible();
   await page.goto('./#/plan/list');
-  await page.getByRole('button', { name: new RegExp(TASK) }).click();
+  await page.locator('.task-row', { hasText: TASK }).click();
   await expect(page.getByText(/40 min logged/)).toBeVisible();
 });
 
@@ -91,10 +91,12 @@ test('dependency cycles are blocked with a message naming the tasks', async ({ p
   await page.getByRole('button', { name: 'Start Plan session' }).click();
   await page.getByLabel(/New task in/).fill('Visit the spaces');
   await page.getByLabel(/New task in/).press('Enter');
-  await page.getByRole('button', { name: /Visit the spaces/ }).click();
+  await page.locator('.task-row', { hasText: 'Visit the spaces' }).click();
   await page.getByLabel('Add a predecessor').selectOption({ label: TASK });
   await page.getByRole('button', { name: 'Save', exact: true }).click();
-  await page.getByRole('button', { name: new RegExp(TASK) }).click();
+  // Saving is async; wait for the editor to close before opening the other task.
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.locator('.task-row', { hasText: TASK }).click();
   await page.getByLabel('Add a predecessor').selectOption({ label: 'Visit the spaces' });
   await expect(
     page.getByText(/That would create a loop: .*Visit the spaces.*List three studio spaces/),
