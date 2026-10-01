@@ -119,13 +119,11 @@ function computeLayout(
       });
     }
   }
-  const edges: LEdge[] = g
-    .edges()
-    .map((e) => ({
-      from: e.v,
-      to: e.w,
-      points: (g.edge(e) as { points: { x: number; y: number }[] }).points,
-    }));
+  const edges: LEdge[] = g.edges().map((e) => ({
+    from: e.v,
+    to: e.w,
+    points: (g.edge(e) as { points: { x: number; y: number }[] }).points,
+  }));
   const gg = g.graph() as { width?: number; height?: number };
   return { nodes, edges, clusters, width: gg.width ?? 0, height: gg.height ?? 0 };
 }

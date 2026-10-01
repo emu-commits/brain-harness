@@ -1,6 +1,7 @@
 import type { Clock } from '../core/util/clock';
 import type { IdGen } from '../core/util/ids';
 import type {
+  CheckIn,
   Cents,
   Evidence,
   ExecutionRecord,
@@ -23,6 +24,8 @@ export function beginTask(
     definitionOfDone: string;
     intention?: Intention;
     predictedMinutes?: number;
+    /** The user's own small version for this sitting. */
+    focus?: string;
   },
   clock: Clock,
 ): Workspace {
@@ -42,6 +45,7 @@ export function beginTask(
         sessionId: opts.sessionId,
         startedAt: clock.now(),
         ...(opts.predictedMinutes ? { predictedMinutes: opts.predictedMinutes } : {}),
+        ...(opts.focus?.trim() ? { focus: opts.focus.trim() } : {}),
       },
     },
   );
@@ -78,6 +82,7 @@ export function recordSitting(
       ? { predictedMinutes: running.predictedMinutes }
       : {}),
     ...(input.surprise?.trim() ? { surprise: input.surprise.trim() } : {}),
+    ...(running.focus ? { focus: running.focus } : {}),
   };
   const evidence: Evidence[] = input.evidence.map((e) => ({
     ...e,
@@ -117,4 +122,9 @@ export function patchTask(
   const next = { ...t, ...patch };
   for (const k of clear) delete next[k];
   return { ...ws, tasks: upsert(ws.tasks, next) };
+}
+
+/** Insert or update a WOOP check-in (always writable, in any session mode). */
+export function saveCheckIn(ws: Workspace, c: CheckIn): Workspace {
+  return { ...ws, checkins: upsert(ws.checkins, c) };
 }

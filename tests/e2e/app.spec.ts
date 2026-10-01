@@ -30,6 +30,8 @@ test('complete a task with actuals, cost and evidence in three taps after Start'
   await page.getByLabel('Evidence note').fill('Three addresses in my notes app');
   // Tap 3
   await page.getByRole('button', { name: 'Save' }).click();
+  await expect(page.getByText('Milestone reached:')).toBeVisible();
+  await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByText('No open tasks.')).toBeVisible();
   await page.goto('./#/plan/list');
   await page.locator('.task-row', { hasText: TASK }).click();

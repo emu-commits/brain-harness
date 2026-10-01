@@ -6,10 +6,15 @@ import { FirstRun } from './screens/FirstRun/FirstRun';
 import { Today } from './screens/Today/Today';
 import { Plan } from './screens/Plan/Plan';
 import { Settings } from './screens/Settings/Settings';
+import { Done } from './screens/Done/Done';
 
 export function App() {
   const { ready, ws } = useStore();
   const loc = useLocation();
+  // New screen, new scroll position: the top of a screen is where its most important card lives.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [loc.pathname]);
   if (!ready) return <div className="loading" aria-busy="true" />;
   const hasGoals = ws.goals.length > 0;
   const bare = loc.pathname.startsWith('/welcome');
@@ -20,6 +25,7 @@ export function App() {
       <Route path="/plan" element={hasGoals ? <Plan /> : <Navigate to="/welcome" replace />} />
       <Route path="/plan/:tab" element={hasGoals ? <Plan /> : <Navigate to="/welcome" replace />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/done" element={hasGoals ? <Done /> : <Navigate to="/welcome" replace />} />
       <Route path="*" element={<Navigate to={hasGoals ? '/today' : '/welcome'} replace />} />
     </Routes>
   );

@@ -16,6 +16,10 @@ import { WhySheet } from '../../components/WhySheet';
 import type { Trace } from '../../../core/engines/scenarios';
 import { cancelRunning, patchTask } from '../../actions';
 import { RunningCard, PreTaskSheet, PostTaskSheet } from './TaskRun';
+import type { SittingResult } from './TaskRun';
+import { ObstacleMoment, ProgressCard, TodaysPlan, WoopRitual } from './Woop';
+import { obstacleMomentAvailable, todaysPlan, woopDue } from '../../../core/harness/woop';
+import { milestoneProgress } from '../../../core/engines/progress';
 import { Errors, Sheet } from '../../components/Sheet';
 
 export function Today() {
@@ -29,6 +33,8 @@ export function Today() {
   const [sheet, setSheet] = useState<null | 'pick' | 'pre' | 'post'>(null);
   const [why, setWhy] = useState<{ value: string; trace: Trace } | null>(null);
   const [post, setPost] = useState<{ complete: boolean } | null>(null);
+  const [tiny, setTiny] = useState<{ taskId: ID; focus: string } | null>(null);
+  const [celebrate, setCelebrate] = useState<SittingResult['progress'] | null>(null);
 
   const running =
     settings.running && ws.tasks.some((t) => t.id === settings.running!.taskId)
@@ -67,6 +73,8 @@ export function Today() {
         daysAway={hook!.resume!.daysAway}
         note={hook!.resume!.handoffNote}
         lastSessionId={hook!.resume!.lastSessionId}
+        nextTaskId={next?.taskId}
+        onStartTiny={(taskId, focus) => setTiny({ taskId, focus })}
       />
     );
 
@@ -76,21 +84,45 @@ export function Today() {
   const firstRun = (loc.state as { firstRun?: boolean } | null)?.firstRun;
   const openTasks = tasks.filter((t) => t.status !== 'completed' && t.status !== 'skipped');
   const currentTask = ws.tasks.find((t) => t.id === currentId);
+  const tinyTask = tiny ? ws.tasks.find((t) => t.id === tiny.taskId) : undefined;
+  const planToday = todaysPlan(ws, goal.id, today);
+  const showWoop = !running && !celebrate && !tiny && woopDue(ws, goal.id, clock.now());
+  const msProgress = currentTask?.milestoneId
+    ? milestoneProgress(ws, currentTask.milestoneId)
+    : null;
+  const doneCount = tasks.filter((t) => t.status === 'completed').length;
+  const onSittingDone = (result: SittingResult, taskId: ID) => {
+    setSheet(null);
+    setPicked(null);
+    if (result.progress) setCelebrate(result.progress);
+    if (result.tiny) setTiny({ taskId, focus: result.tiny });
+  };
 
   return (
     <div className="page today">
-      {charterLine(goal) && <p className="charter-line">{charterLine(goal)}</p>}
+      {/* During the check-in the charter is revealed step by step, so the summary line waits. */}
+      {!showWoop && charterLine(goal) && <p className="charter-line">{charterLine(goal)}</p>}
+      {planToday && <TodaysPlan plan={planToday.plan} />}
+      {showWoop && <WoopRitual />}
       {ctx?.handoff && !running && (
         <p className="handoff">
           <span className="muted">Last time:</span> “{ctx.handoff}”
         </p>
       )}
 
-      {running && currentTask ? (
+      {celebrate ? (
+        <ProgressCard
+          progress={celebrate.progress}
+          minutes={celebrate.minutes}
+          estimateBase={celebrate.estimateBase}
+          onClose={() => setCelebrate(null)}
+        />
+      ) : running && currentTask ? (
         <RunningCard
           task={currentTask}
           startedAt={running.startedAt}
           predicted={running.predictedMinutes}
+          focus={running.focus}
           onStop={(complete) => (setPost({ complete }), setSheet('post'))}
         />
       ) : ctx ? (
@@ -119,6 +151,23 @@ export function Today() {
                 .filter(Boolean)
                 .join(' · ')}
             </p>
+            {msProgress && !msProgress.reached && (
+              <div className="ms-gradient">
+                <div
+                  className="progress"
+                  role="progressbar"
+                  aria-valuenow={msProgress.pct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`${msProgress.title} progress`}
+                >
+                  <span style={{ width: `${msProgress.pct}%` }} />
+                </div>
+                <span className="muted small">
+                  {msProgress.title} · {msProgress.doneTasks} of {msProgress.totalTasks} done
+                </span>
+              </div>
+            )}
             {ctx.resolved.length > 0 && (
               <div>
                 <dt>Just resolved</dt>
@@ -174,13 +223,25 @@ export function Today() {
         {moreReady} more ready · {blocked} blocked · {stuckIds.length} stuck
       </p>
 
-      {stuckIds.length > 0 && !running && <StuckCards ids={stuckIds} stuck={stuck} />}
+      {stuckIds.length > 0 && !running && !celebrate && (
+        <StuckCards
+          ids={stuckIds}
+          stuck={stuck}
+          onStartTiny={(taskId, focus) => setTiny({ taskId, focus })}
+        />
+      )}
 
       {base && <ForecastLine goalTarget={goal.targetDate} onWhy={setWhy} />}
 
       {firstRun && (
         <p className="nudge">
           <Link to="/plan">Plan more when you’re ready →</Link>
+        </p>
+      )}
+
+      {doneCount > 0 && !celebrate && (
+        <p className="nudge">
+          <Link to="/done">What you’ve done ({doneCount}) →</Link>
         </p>
       )}
 
@@ -200,16 +261,17 @@ export function Today() {
       {sheet === 'pre' && currentTask && (
         <PreTaskSheet task={currentTask} onClose={() => setSheet(null)} />
       )}
+      {tiny && tinyTask && !running && (
+        <PreTaskSheet task={tinyTask} focus={tiny.focus} onClose={() => setTiny(null)} />
+      )}
       {sheet === 'post' && running && currentTask && post && (
         <PostTaskSheet
           task={currentTask}
           startedAt={running.startedAt}
           complete={post.complete}
+          predicted={running.predictedMinutes}
           onClose={() => setSheet(null)}
-          onDone={() => {
-            setSheet(null);
-            setPicked(null);
-          }}
+          onDone={(result) => onSittingDone(result, currentTask.id)}
         />
       )}
       {why && <WhySheet value={why.value} trace={why.trace} ws={ws} onClose={() => setWhy(null)} />}
@@ -313,12 +375,16 @@ function ResumeCard({
   daysAway,
   note,
   lastSessionId,
+  nextTaskId,
+  onStartTiny,
 }: {
   daysAway: number;
   note: string | null;
   lastSessionId: ID;
+  nextTaskId?: ID;
+  onStartTiny: (taskId: ID, focus: string) => void;
 }) {
-  const { commit, goal, ids, clock } = useStore();
+  const { ws, commit, goal, ids, clock } = useStore();
   const navigate = useNavigate();
   const [changed, setChanged] = useState(false);
   const [text, setText] = useState('');
@@ -339,6 +405,17 @@ function ResumeCard({
           <blockquote className="handoff-quote">{note}</blockquote>
         ) : (
           <p className="muted">You didn’t leave a handoff note last time.</p>
+        )}
+        {!changed && nextTaskId && obstacleMomentAvailable(ws, goal!.id, undefined) && (
+          <ObstacleMoment
+            trigger="resume"
+            taskId={nextTaskId}
+            startLabel="Start with this"
+            onStartTiny={async (focus) => {
+              await ack();
+              onStartTiny(nextTaskId, focus);
+            }}
+          />
         )}
         {!changed ? (
           <>
@@ -464,8 +541,18 @@ const STUCK_TEXT: Record<StuckReason['kind'], (r: StuckReason) => string> = {
   blocked: (r) => `blocked for ${(r as { days: number }).days} days`,
 };
 
-function StuckCards({ ids, stuck }: { ids: ID[]; stuck: Record<ID, StuckReason[]> }) {
-  const { ws, commit, clock } = useStore();
+function StuckCards({
+  ids,
+  stuck,
+  onStartTiny,
+}: {
+  ids: ID[];
+  stuck: Record<ID, StuckReason[]>;
+  onStartTiny: (taskId: ID, focus: string) => void;
+}) {
+  const { ws, commit, clock, goal, session } = useStore();
+  // The if-then is offered on the first stuck card only, once per session.
+  const offer = !!goal && obstacleMomentAvailable(ws, goal.id, session?.id);
   const api = useSessionApi();
   const navigate = useNavigate();
   const [open, setOpen] = useState<{ id: ID; action: 'blocker' | 'delegate' | 'drop' } | null>(
@@ -482,7 +569,7 @@ function StuckCards({ ids, stuck }: { ids: ID[]; stuck: Record<ID, StuckReason[]
   };
   return (
     <section className="stuck-list" aria-label="Stuck tasks">
-      {ids.map((id) => {
+      {ids.map((id, i) => {
         const t = ws.tasks.find((x) => x.id === id)!;
         return (
           <article key={id} className="card stuck">
@@ -491,6 +578,13 @@ function StuckCards({ ids, stuck }: { ids: ID[]; stuck: Record<ID, StuckReason[]
             <p className="muted small">
               {stuck[id]!.map((r) => STUCK_TEXT[r.kind](r)).join(' · ')}
             </p>
+            {offer && i === 0 && t.status !== 'blocked' && (
+              <ObstacleMoment
+                trigger="stuck"
+                taskId={id}
+                onStartTiny={(focus) => onStartTiny(id, focus)}
+              />
+            )}
             <p className="prompt">What would help?</p>
             <div className="chips">
               <button

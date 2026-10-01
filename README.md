@@ -24,6 +24,12 @@ against what actually happened, and does all the arithmetic.
 - **Plan**: gap questions one at a time with fading scaffolding, list view, dependency graph (dagre + SVG,
   pan/zoom/pinch, focus mode, collapsible milestones, critical path), charter and premortem, commitments,
   and money (accounts, cash flows, revenue streams).
+- **WOOP as a practice**: every few days a 30-second check-in before you start (picture the outcome,
+  name today's obstacle, re-commit to your if-then). Your own if-then comes back at the moments it was
+  written for: pausing early, returning after a gap, a stuck task. "Is this that moment?" leads to your
+  own 10-minute version.
+- **Progress you can feel**: finishing a task shows what it unlocked and how close the milestone is;
+  reaching one asks what it proved to you. A done log keeps everything you've finished, with evidence.
 - **Sessions** with deliberate friction: Plan, Execute and Review are separate, and ending one runs its hook
   (a handoff note or a memory entry). After three or more days away, your handoff note comes first.
 - **Core engines** (pure TypeScript, fully tested): graph and cycles, critical path, a capacity-based

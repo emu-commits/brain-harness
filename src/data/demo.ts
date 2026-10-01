@@ -316,5 +316,6 @@ export function removeGoal(ws: Workspace, goalId: string): Workspace {
     revenueStreams: ws.revenueStreams.filter((r) => r.goalId !== goalId),
     scenarioSettings: ws.scenarioSettings.filter((s) => s.goalId !== goalId),
     snapshots: ws.snapshots.filter((s) => s.goalId !== goalId),
+    checkins: ws.checkins.filter((c) => c.goalId !== goalId),
   };
 }

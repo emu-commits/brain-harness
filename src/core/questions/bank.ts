@@ -37,7 +37,8 @@ export const QUESTIONS: Record<string, Question> = {
     id: 'C4',
     stage: 'charter',
     prompt: 'Why does this matter to you?',
-    helper: 'Future-you will read this at the start of every session.',
+    helper:
+      'Take a few seconds to picture it done first: where you are, what’s different, how it feels.',
     answerType: 'longText',
     writes: { kind: 'goal.charter.why' },
     appliesTo: 'goal',
@@ -47,7 +48,7 @@ export const QUESTIONS: Record<string, Question> = {
     id: 'C5',
     stage: 'charter',
     prompt: 'What’s the thing inside you most likely to get in the way?',
-    helper: 'Not the circumstances. A habit, a feeling, a pattern.',
+    helper: 'Picture the moment it shows up. Not the circumstances: a habit, a feeling, a pattern.',
     answerType: 'text',
     writes: { kind: 'goal.charter.obstacle' },
     appliesTo: 'goal',

@@ -350,6 +350,12 @@ function Thresholds() {
           undefined,
           1,
         )}
+        {num(
+          'Picture-it check-in every (days, 0 = off)',
+          s.woopEveryDays ?? 3,
+          (n) => ({ woopEveryDays: Math.round(n) }),
+          'A 30-second outcome → obstacle → plan rehearsal before you start.',
+        )}
       </div>
       <Errors errors={errors} />
     </section>

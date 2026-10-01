@@ -107,3 +107,38 @@ Running log of choices made where the spec was silent or ambiguous (SPEC §0). N
 
 34. **E2E** runs against `vite preview` with the Pages base path. Set `PW_CHROMIUM` to use a preinstalled
     Chromium; CI installs Playwright's own.
+
+## Psychology layer (WOOP practice, obstacle moments, progress)
+
+35. **WOOP is rehearsed, not filled in once.** A short check-in (picture the outcome → name today's
+    obstacle → re-read the if-then, "still right?") appears on Today when the last one is at least
+    `woopEveryDays` old (default 3; 0 turns it off; configurable in Settings). It never runs on the
+    goal's first day, and a skip counts, so skipping quiets it for the same interval. A ritual seen at
+    every session habituates; a ritual every few days stays read. It's a card, not a modal, so it never
+    blocks Start (the ≤ 3-taps acceptance still holds). While it shows, the charter summary line is
+    hidden so the plan is revealed at step 3, after the obstacle.
+36. **Charter edits stay Plan-only.** A "not quite" in the check-in stores the user's revised if-then
+    as a pending draft on the check-in; the next Plan session shows it with "Use the new version /
+    Keep the old one".
+37. **Today's if-then.** If the user names an obstacle for today, they can write "I will ___" for it.
+    That shows under the charter for the rest of the day.
+38. **Obstacle moments.** The user's own if-then is shown back, with "Is this that moment?", when they
+    pause a sitting under half their prediction (prediction = the sitting's prediction, else the
+    estimate's likely value), return after the resume threshold, or hit a stuck task (first stuck
+    card only). At most once per session. "Yes" asks for their 10-minute version of what's next, which
+    becomes the sitting's `focus` with a 10-minute prediction; it still goes through the pre-task
+    hook (definition of done is confirmed).
+39. **New table `checkins`** (schema v2). Dexie gets a version-2 store; export files from schema 1
+    migrate by adding an empty `checkins` list. Check-ins are always writable (records of reality),
+    like execution records. `ExecutionRecord.focus` and `Settings.running.focus` are new optional fields.
+40. **Progress moment on completion** replaces the calibration toast: what the task unlocked (successors
+    whose predecessors are now all complete; a wait shows as "the wait can begin"), the milestone's
+    progress by estimated minutes with what's left, and goal-level task counts. Reaching a milestone
+    asks "What did reaching this prove to you?", saved as a `lesson` in the memory log. No badges,
+    confetti or streaks.
+41. **Done log** (`/done`): every completed task, newest first, with its evidence (notes, links,
+    numbers, photos).
+42. **Copy**: C4 and C5 helpers now invite imagery ("picture it done first", "picture the moment it
+    shows up"), following mental-contrasting instructions. Prompts themselves are unchanged.
+43. **Scroll resets to the top on route change**, so the card that matters (ritual, resume, next) is
+    what the user sees first.

@@ -404,5 +404,24 @@ export function validateWorkspace(ws: Workspace): ValidationError[] {
       });
   }
 
+  for (const c of ws.checkins) {
+    if (!goals.has(c.goalId))
+      push({
+        code: 'missingRef',
+        table: 'checkins',
+        id: c.id,
+        field: 'goalId',
+        message: 'Check-in refers to a missing goal',
+      });
+    if (!isISODate(c.day))
+      push({
+        code: 'badDate',
+        table: 'checkins',
+        id: c.id,
+        field: 'day',
+        message: 'Check-in needs a valid day',
+      });
+  }
+
   return errors;
 }

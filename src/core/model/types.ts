@@ -192,6 +192,8 @@ export interface ExecutionRecord {
   cost?: Cents;
   predictedMinutes?: number;
   surprise?: string;
+  /** The user's own small version of the task for this sitting ("the 10-minute version"). */
+  focus?: string;
 }
 
 export interface Evidence {
@@ -316,7 +318,15 @@ export interface Settings {
   calibration: { window: number; minTasks: number };
   lastExportAt?: ISOTime;
   /** A running task timer, persisted so it survives reloads. */
-  running?: { taskId: ID; sessionId: ID; startedAt: ISOTime; predictedMinutes?: number };
+  running?: {
+    taskId: ID;
+    sessionId: ID;
+    startedAt: ISOTime;
+    predictedMinutes?: number;
+    focus?: string;
+  };
+  /** Run the WOOP check-in at session start when the last one is at least this many days old. 0 = off. */
+  woopEveryDays?: number;
   /** Resume prompt already acknowledged for this session id. */
   resumeAckFor?: ID;
   storagePersisted?: boolean;
@@ -335,6 +345,37 @@ export interface QuestionStat {
   id: string;
   stuckTaps: number;
   attempts: number;
+}
+
+/**
+ * A moment the harness asked the user to re-engage with their WOOP: the session-start ritual, or an
+ * obstacle moment (stopping early, coming back after a gap, a stuck task). Always the user's words.
+ */
+export interface CheckIn {
+  id: ID;
+  goalId: ID;
+  sessionId?: ID;
+  at: ISOTime;
+  /** The user's local calendar date at the time (for "today's plan"). */
+  day: ISODate;
+  kind: 'woop' | 'obstacleMoment';
+  /** woop: what the user named as most likely to get in the way today. */
+  obstacleToday?: string;
+  /** woop: an if-then for today's obstacle, in the user's words. */
+  todayPlan?: string;
+  /** woop: whether the charter's if-then still felt right. */
+  planStillRight?: boolean;
+  /** woop: a revised if-then to apply in the next Plan session (charter edits are Plan-only). */
+  revisedPlan?: string;
+  revisedPlanStatus?: 'pending' | 'applied' | 'dismissed';
+  /** obstacleMoment: what prompted it. */
+  trigger?: 'stoppedEarly' | 'resume' | 'stuck';
+  taskId?: ID;
+  /** obstacleMoment: did the user recognise the moment from their plan? */
+  isThatMoment?: boolean;
+  /** obstacleMoment: the user's small version of the next step. */
+  tinyVersion?: string;
+  skipped?: boolean;
 }
 
 export interface ImageBlob {
@@ -365,6 +406,7 @@ export interface Workspace {
   settings: Settings[];
   gapDismissals: GapDismissal[];
   questionStats: QuestionStat[];
+  checkins: CheckIn[];
 }
 
 export type TableName = keyof Workspace;
@@ -390,6 +432,7 @@ export const TABLES: readonly TableName[] = [
   'settings',
   'gapDismissals',
   'questionStats',
+  'checkins',
 ];
 
 /** Primary key field per table. */
@@ -414,6 +457,7 @@ export const TABLE_KEYS: Record<TableName, string> = {
   settings: 'id',
   gapDismissals: 'id',
   questionStats: 'id',
+  checkins: 'id',
 };
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;

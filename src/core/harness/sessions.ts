@@ -70,6 +70,7 @@ const ALWAYS: ReadonlySet<TableName> = new Set<TableName>([
   'settings',
   'gapDismissals',
   'questionStats',
+  'checkins',
   'capacities',
 ]);
 

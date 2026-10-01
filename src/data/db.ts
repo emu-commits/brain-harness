@@ -15,7 +15,7 @@ export class GoalGraphDB extends Dexie {
     super(name);
     for (const v of DB_VERSIONS) {
       const schema: Record<string, string> = { images: '&id' };
-      for (const t of TABLES) schema[t] = v.indexes[t] ?? `&${TABLE_KEYS[t]}`;
+      for (const t of v.tables) schema[t] = v.indexes[t] ?? `&${TABLE_KEYS[t]}`;
       const ver = this.version(v.version).stores(schema);
       if (v.upgrade) ver.upgrade(v.upgrade);
     }

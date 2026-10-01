@@ -28,6 +28,7 @@ export const DEFAULT_SETTINGS: Settings = {
   blockedAssumeDays: 7,
   stuck: { sessions: 3, overrunFactor: 1.5, blockedDays: 14 },
   calibration: { window: 10, minTasks: 5 },
+  woopEveryDays: 3,
 };
 
 export function getSettings(ws: Workspace): Settings {

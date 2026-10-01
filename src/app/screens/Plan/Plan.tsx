@@ -7,6 +7,7 @@ import { GapsPanel } from './GapsPanel';
 import { ListView } from './ListView';
 import { CharterView } from './CharterView';
 import { MoneyView } from './MoneyView';
+import { RevisionBanner } from './RevisionBanner';
 
 // dagre is large; load the graph view only when it's opened.
 const GraphView = lazy(() => import('./GraphView').then((m) => ({ default: m.GraphView })));
@@ -45,6 +46,7 @@ export function Plan() {
           </button>
         </section>
       )}
+      <RevisionBanner editable={editable} />
       <nav className="tabs" aria-label="Plan views">
         {TABS.map(([k, label]) => (
           <NavLink
@@ -64,7 +66,7 @@ export function Plan() {
           <GraphView editable={editable} />
         </Suspense>
       )}
-      {tab === 'charter' && <CharterView editable={editable} />}
+      {tab === 'charter' && <CharterView key={goal.charter.obstaclePlan} editable={editable} />}
       {tab === 'money' && <MoneyView editable={editable} />}
     </div>
   );

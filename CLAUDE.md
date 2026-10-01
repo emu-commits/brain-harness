@@ -25,15 +25,15 @@ Spec: docs/SPEC.md (source of truth). Log decisions in docs/DECISIONS.md.
 - UI copy: questions, not commands. No "you should." Financial screens show the disclaimer.
 
 ## Status
-Phases 0–5 are built. Next: Phase 6 (Forecast screen), 7 (Review), 8 (Hardening: PWA, a11y audit, .ics).
+Phases 0–5 are built, plus the WOOP practice / obstacle moments / progress layer (DECISIONS 35–43). Next: Phase 6 (Forecast screen), 7 (Review), 8 (Hardening: PWA, a11y audit, .ics).
 The engines those phases need (scenarios, snapshots/diff/attribution, calibration, triggers) already exist
 in src/core/engines with tests.
 
 ## Layout
 - src/core/model — types, factories, selectors
 - src/core/validation — invariants (SPEC §8.1)
-- src/core/engines — graph, cpm, scheduler, finance, scenarios, calibration, triggers, snapshots, nextAction
-- src/core/harness — sessions (mode guard), hooks, context assembler, stuck detector, scaffold levels
+- src/core/engines — graph, cpm, scheduler, finance, scenarios, calibration, triggers, snapshots, nextAction, progress
+- src/core/harness — sessions (mode guard), hooks, context assembler, stuck detector, scaffold levels, woop
 - src/core/questions — bank (question text as data), examples, gaps, apply
 - src/data — Storage port, Dexie implementation, migrations, export/import, demo data
 - src/app — React UI (store, session switching, screens)

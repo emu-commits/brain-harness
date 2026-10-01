@@ -1574,3 +1574,197 @@ svg.graph:active {
 .badge {
   white-space: nowrap;
 }
+
+/* ---------- WOOP, obstacle moments, progress ---------- */
+
+.woop {
+  border-left: 3px solid var(--accent);
+}
+.woop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.woop-dots {
+  display: flex;
+  gap: 4px;
+}
+.woop-dots span {
+  width: 18px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.woop-dots span.on {
+  background: var(--accent);
+}
+.woop-q {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 3.8vw, 1.5rem);
+  margin: 6px 0 6px;
+}
+.woop-q label {
+  font: inherit;
+}
+.woop-outcome {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin: 10px 0 4px;
+}
+.woop-outcome p {
+  margin: 0 0 4px;
+}
+.woop-proof {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+.breath {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 2px solid var(--accent);
+  animation: breathe 8s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+.woop-plan {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  margin: 2px 0 10px;
+}
+.ifthen-line em {
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+}
+.ifthen-line strong {
+  font-weight: 600;
+  color: var(--accent);
+}
+.prefixed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prefixed span {
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+.today-plan {
+  margin: -6px 0 14px;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+.today-plan .eyebrow {
+  display: inline;
+  margin-right: 6px;
+}
+.moment {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin: 4px 0 14px;
+}
+.moment .row-actions {
+  margin-top: 4px;
+}
+.prompt.inline {
+  display: inline;
+  margin: 0 6px 0 0;
+}
+.focus-line {
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+.focus-line .eyebrow {
+  display: block;
+}
+.saved {
+  color: var(--st-completed);
+  font-weight: 600;
+}
+.progress-card {
+  border-left: 3px solid var(--st-completed);
+}
+.progress-card .unlocked ul {
+  margin: 0 0 12px;
+  padding-left: 1.1rem;
+}
+.ms-progress {
+  margin: 10px 0 12px;
+}
+.ms-progress-title {
+  margin-bottom: 6px;
+}
+.ms-progress.reached .ms-progress-title {
+  color: var(--st-completed);
+}
+.progress.big {
+  max-width: none;
+  height: 10px;
+  margin-bottom: 6px;
+}
+.ms-gradient {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 10px;
+}
+.ms-gradient .progress {
+  max-width: 120px;
+}
+.revision {
+  border-left: 3px solid var(--st-progress);
+}
+.revision p {
+  margin-bottom: 4px;
+}
+.done-log {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+.done-log h2 {
+  font-size: 1.05rem;
+}
+.evidence {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+.evidence-img {
+  display: block;
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+
+.card .progress {
+  background: var(--line);
+}
+.goal-switch {
+  min-width: min(55%, 100%);
+}

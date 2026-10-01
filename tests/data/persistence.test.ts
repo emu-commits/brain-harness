@@ -117,6 +117,25 @@ describe('export / import', () => {
   });
 });
 
+describe('migrations', () => {
+  it('imports a schema-1 export (before check-ins existed)', async () => {
+    const { ws } = sampleWorkspace();
+    const v1 = { ...ws } as Record<string, unknown>;
+    delete v1.checkins;
+    const r = parseImport(
+      JSON.stringify({
+        format: 'goalgraph-export',
+        schemaVersion: 1,
+        exportedAt: 'x',
+        data: v1,
+        images: [],
+      }),
+    );
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.ws.checkins).toEqual([]);
+  });
+});
+
 describe('diffWorkspaces', () => {
   it('reports only changed rows', () => {
     const { ws, tasks } = sampleWorkspace();

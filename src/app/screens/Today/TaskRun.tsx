@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '../../store';
 import { useSessionApi } from '../../session';
-import { useToast } from '../../toast';
 import { postTaskHook, preTaskHook } from '../../../core/harness/hooks';
 import { activeSession } from '../../../core/harness/sessions';
 import type { Task } from '../../../core/model/types';
@@ -11,16 +10,36 @@ import { Errors, Sheet } from '../../components/Sheet';
 import { Field, MoneyInput } from '../../components/inputs';
 import { fmtMinutes } from '../../format';
 import { loggedMinutesByTask } from '../../../core/model/factories';
+import { completionProgress } from '../../../core/engines/progress';
+import type { CompletionProgress } from '../../../core/engines/progress';
+import { isEarlyStop, obstacleMomentAvailable } from '../../../core/harness/woop';
+import { ObstacleMoment } from './Woop';
+
+export interface SittingResult {
+  /** Present when the task was completed. */
+  progress?: { progress: CompletionProgress; minutes: number; estimateBase?: number };
+  /** The user's small version to start next, from an obstacle moment. */
+  tiny?: string;
+}
 
 // The Execute loop: preTask hook → optional timer → postTask hook.
 
-export function PreTaskSheet({ task, onClose }: { task: Task; onClose: () => void }) {
+export function PreTaskSheet({
+  task,
+  focus,
+  onClose,
+}: {
+  task: Task;
+  /** The user's own small version for this sitting, from an obstacle moment. */
+  focus?: string;
+  onClose: () => void;
+}) {
   const { commit, clock } = useStore();
   const api = useSessionApi();
   const hook = preTaskHook(task);
   const [dod, setDod] = useState(hook.definitionOfDone);
   const [predicted, setPredicted] = useState(
-    hook.predictedMinutesDefault ? String(hook.predictedMinutesDefault) : '',
+    focus ? '10' : hook.predictedMinutesDefault ? String(hook.predictedMinutesDefault) : '',
   );
   const [when, setWhen] = useState('');
   const [where, setWhere] = useState('');
@@ -43,6 +62,7 @@ export function PreTaskSheet({ task, onClose }: { task: Task; onClose: () => voi
               ? { when: when.trim(), where: where.trim() }
               : undefined,
           predictedMinutes: Number.isFinite(p) && p > 0 ? p : undefined,
+          focus,
         },
         clock,
       );
@@ -65,6 +85,11 @@ export function PreTaskSheet({ task, onClose }: { task: Task; onClose: () => voi
         </>
       }
     >
+      {focus && (
+        <p className="focus-line">
+          <span className="eyebrow">This sitting</span> {focus}
+        </p>
+      )}
       <Field
         label="Done when"
         hint={task.definitionOfDone ? 'Confirm it, or sharpen it.' : 'Something observable.'}
@@ -115,11 +140,13 @@ export function RunningCard({
   task,
   startedAt,
   predicted,
+  focus,
   onStop,
 }: {
   task: Task;
   startedAt: string;
   predicted?: number;
+  focus?: string;
   onStop: (complete: boolean) => void;
 }) {
   const { commit } = useStore();
@@ -145,6 +172,12 @@ export function RunningCard({
         </p>
       )}
       <dl className="ctx">
+        {focus && (
+          <div>
+            <dt>This sitting</dt>
+            <dd>{focus}</dd>
+          </div>
+        )}
         <div>
           <dt>Done when</dt>
           <dd>{task.definitionOfDone}</dd>
@@ -171,12 +204,13 @@ export function PostTaskSheet(props: {
   task: Task;
   startedAt: string;
   complete: boolean;
+  /** The sitting's prediction, if the user made one. */
+  predicted?: number;
   onClose: () => void;
-  onDone: () => void;
+  onDone: (result: SittingResult) => void;
 }) {
   const { task } = props;
-  const { ws, commit, ids, clock, storage } = useStore();
-  const toast = useToast();
+  const { ws, commit, ids, clock, storage, session } = useStore();
   const hook = postTaskHook(task, props.startedAt, clock.now());
   const [minutes, setMinutes] = useState(String(hook.prefillMinutes ?? ''));
   const [cost, setCost] = useState<number | null>(null);
@@ -189,7 +223,16 @@ export function PostTaskSheet(props: {
   const [surprise, setSurprise] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
 
-  const save = async () => {
+  const predicted = props.predicted ?? task.estimateMinutes?.base;
+  // Offer the user's if-then when they pause well short of their own prediction (once a session).
+  const [offerMoment] = useState(
+    () =>
+      !props.complete &&
+      isEarlyStop(hook.prefillMinutes ?? 0, predicted) &&
+      obstacleMomentAvailable(ws, task.goalId, session?.id),
+  );
+
+  const save = async (tiny?: string) => {
     const mins = Number(minutes);
     if (!Number.isFinite(mins) || mins < 0)
       return setErrors(['Enter the minutes you actually spent.']);
@@ -222,13 +265,17 @@ export function PostTaskSheet(props: {
       ),
     );
     if (!r.ok) return setErrors(r.errors);
-    if (props.complete && task.estimateMinutes) {
-      const total = prevLogged + Math.round(mins);
-      toast(
-        `Logged ${fmtMinutes(total)} in total · your likely estimate was ${fmtMinutes(task.estimateMinutes.base)}.`,
-      );
+    if (props.complete) {
+      props.onDone({
+        progress: {
+          progress: completionProgress(r.ws, task.id),
+          minutes: prevLogged + Math.round(mins),
+          estimateBase: task.estimateMinutes?.base,
+        },
+      });
+    } else {
+      props.onDone(tiny ? { tiny } : {});
     }
-    props.onDone();
   };
 
   return (
@@ -241,6 +288,14 @@ export function PostTaskSheet(props: {
         </button>
       }
     >
+      {offerMoment && (
+        <ObstacleMoment
+          trigger="stoppedEarly"
+          taskId={task.id}
+          startLabel="Save this sitting and start 10 minutes"
+          onStartTiny={(focus) => void save(focus)}
+        />
+      )}
       <Field label="Minutes spent">
         {(id) => (
           <input
